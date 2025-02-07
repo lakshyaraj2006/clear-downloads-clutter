@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 import shutil
+import platform
+
+system = platform.uname().system
 
 DOWNLOADS_FOLDER_PATH = Path.home() / "Downloads"
 
@@ -42,7 +45,14 @@ else:
     
     if choice in ["y", "n"]:
         if choice == "y":
-            os.startfile(DOWNLOADS_FOLDER_PATH)
+            if system == "Windows":
+                os.startfile(DOWNLOADS_FOLDER_PATH)
+            elif system == "Linux":
+                    os.system('xdg-open ' + str(DOWNLOADS_FOLDER_PATH))
+            elif system == "Darwin":
+                    os.system('open ' + str(DOWNLOADS_FOLDER_PATH))
+            else:
+                raise OSError('Unsupported operating system: ' + os.name)
             exit(1)
     else:
         print("Please enter valid choice!")
